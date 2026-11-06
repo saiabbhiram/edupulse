@@ -141,4 +141,63 @@ education-management-system/
 │       ├── Reports.jsx           # Multi-department analytics & CSV export
 │       └── Settings.jsx          # Institutional configuration & data reset
 ```
-#Jenkisfile is added
+## Jenkins Deployment Permissions (Ubuntu EC2)
+
+Jenkins requires permission to deploy the React build files into the Nginx web directory.
+
+### 1. Configure sudo permissions
+
+Open the sudoers configuration:
+
+```bash
+sudo visudo
+```
+
+Add the following line at the bottom:
+
+```bash
+jenkins ALL=(root) NOPASSWD: /usr/bin/mkdir, /usr/bin/rm, /usr/bin/cp, /usr/bin/chown
+```
+
+Save and exit.
+
+### 2. Verify sudo permissions
+
+```bash
+sudo -l -U jenkins
+```
+
+### 3. Test Jenkins permissions
+
+```bash
+sudo -u jenkins sudo -n mkdir -p /var/www/edupulse
+```
+
+### 4. Configure Nginx deployment directory
+
+```bash
+sudo mkdir -p /var/www/edupulse
+sudo chown -R www-data:www-data /var/www/edupulse
+sudo chmod -R 755 /var/www/edupulse
+```
+
+### 5. Restart Nginx
+
+```bash
+sudo nginx -t
+sudo systemctl restart nginx
+sudo systemctl enable nginx
+```
+
+### 6. Jenkins Deployment Commands
+
+```bash
+sudo mkdir -p /var/www/edupulse
+sudo rm -rf /var/www/edupulse/*
+sudo cp -r dist/. /var/www/edupulse/
+sudo chown -R www-data:www-data /var/www/edupulse
+```
+
+**Note:** These permissions allow Jenkins to execute only the specified administrative commands without requiring a password.
+
+
