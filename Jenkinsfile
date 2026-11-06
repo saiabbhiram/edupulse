@@ -31,6 +31,7 @@ pipeline{
     }
     post {
     success { echo 'SUCCESS': your site is live on the server. }
-    failure { echo 'FAILED': scroll up in this log to find the red error.'}
+    failure { echo 'FAILED': scroll up in this log to find the red error.' }
  }
+}
 }
